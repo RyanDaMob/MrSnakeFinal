@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mr. Snake — Dungeon Serpent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     MAIN MENU
+═══════════════════════════════════════════════ -->
+<div id="screen-menu" class="screen active">
+  <div class="menu-bg-stones"></div>
+  <div class="menu-bg-vignette"></div>
+  <div class="menu-torch tl"></div>
+  <div class="menu-torch tr"></div>
+  <div class="menu-torch bl"></div>
+  <div class="menu-torch br"></div>
+
+  <div class="menu-container">
+    <div class="title-frame">
+      <div class="title-snake-icon">🐍</div>
+      <h1 class="game-title">MR. SNAKE</h1>
+      <p class="chapter-label">— Dungeon Serpent —</p>
+    </div>
+    <div class="menu-buttons">
+      <button class="btn-pixel" id="btn-start">▶  Play</button>
+      <button class="btn-pixel" id="btn-howto">?  How to Play</button>
+      <button class="btn-pixel btn-secondary" id="btn-settings">⚙  Settings</button>
+      <button class="btn-pixel btn-secondary" id="btn-credits">★  Credits</button>
+    </div>
+    <div class="menu-footer">Arrow Keys / WASD to move &nbsp;·&nbsp; SPACE to act</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER SELECT (Play)
+═══════════════════════════════════════════════ -->
+<div id="screen-chapters" class="screen">
+  <div class="menu-bg-stones" style="pointer-events:none;"></div>
+  <div class="menu-bg-vignette" style="pointer-events:none;"></div>
+  <div class="howto-container" style="position:relative;z-index:1;">
+    <h2 class="section-title">Select Chapter</h2>
+    <div id="chapter-cards" class="chapter-list"></div>
+    <button class="btn-pixel" id="btn-chapters-back" style="margin-top:24px;">← Back</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     HOW TO PLAY
+═══════════════════════════════════════════════ -->
+<div id="screen-howto" class="screen">
+  <div class="howto-container">
+    <h2 class="section-title">How to Play</h2>
+    <div class="howto-grid">
+      <div class="howto-card">
+        <div class="howto-icon">🐍</div>
+        <h3>Movement</h3>
+        <p>Arrow Keys or WASD to move one tile at a time. Navigate the winding dungeon corridors.</p>
+      </div>
+      <div class="howto-card">
+        <div class="howto-icon">⚔️</div>
+        <h3>Combat</h3>
+        <p>Walk into an enemy to engage. Attack twice to charge Fang Strike for big damage.</p>
+      </div>
+      <div class="howto-card">
+        <div class="howto-icon">🛡️</div>
+        <h3>Defend</h3>
+        <p>When enemy attacks: DODGE window (2s, easy) → then PARRY window (1.3s, very hard).</p>
+      </div>
+      <div class="howto-card">
+        <div class="howto-icon">📦</div>
+        <h3>Chests</h3>
+        <p>Open chests for stat upgrades. Choose +Max HP or +Attack.</p>
+      </div>
+      <div class="howto-card">
+        <div class="howto-icon">🔥</div>
+        <h3>Traps</h3>
+        <p>Spike traps block your path. Hit a hard PARRY window to pass safely.</p>
+      </div>
+      <div class="howto-card">
+        <div class="howto-icon">🔰</div>
+        <h3>Checkpoints</h3>
+        <p>Restore full HP and save progress. Respawn here if you fall.</p>
+      </div>
+      <div class="howto-card">
+        <div class="howto-icon">🗡️</div>
+        <h3>Mini-Bosses</h3>
+        <p>Each chapter ends with a powerful guardian. Defeat it to unlock the gate.</p>
+      </div>
+      <div class="howto-card">
+        <div class="howto-icon">🌀</div>
+        <h3>The Gate</h3>
+        <p>Reach the swirling gate after defeating the mini-boss to complete the chapter.</p>
+      </div>
+    </div>
+    <button class="btn-pixel" id="btn-howto-back">← Back</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SETTINGS
+═══════════════════════════════════════════════ -->
+<div id="screen-settings" class="screen">
+  <div class="menu-bg-stones" style="pointer-events:none;"></div>
+  <div class="menu-bg-vignette" style="pointer-events:none;"></div>
+  <div class="settings-container" style="position:relative;z-index:1;">
+    <h2 class="section-title">Settings</h2>
+
+    <div class="settings-group">
+      <div class="settings-row">
+        <label class="settings-label">🎵 Music</label>
+        <div class="slider-wrap">
+          <input type="range" id="slider-music" min="0" max="100" value="70" class="pixel-slider" />
+          <span id="slider-music-val" class="slider-val">70%</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <label class="settings-label">🔊 SFX</label>
+        <div class="slider-wrap">
+          <input type="range" id="slider-sfx" min="0" max="100" value="80" class="pixel-slider" />
+          <span id="slider-sfx-val" class="slider-val">80%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-group settings-danger-group">
+      <h3 class="settings-section-label">Data</h3>
+      <button class="btn-pixel btn-danger" id="btn-clear-data">🗑 Clear Game Data</button>
+    </div>
+
+    <button class="btn-pixel" id="btn-settings-back" style="margin-top:28px;">← Back</button>
+  </div>
+</div>
+
+<!-- Pause menu overlay (shown when clicking Menu during gameplay) -->
+<div id="overlay-pause" class="overlay hidden">
+  <div class="overlay-box">
+    <h2 class="overlay-title">⏸ PAUSED</h2>
+    <p class="overlay-desc">Your progress is saved at the last checkpoint.</p>
+    <div class="pause-buttons">
+      <button class="btn-pixel" id="btn-pause-resume">▶ Resume</button>
+      <button class="btn-pixel btn-secondary" id="btn-pause-menu">⌂ Main Menu</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm clear overlay -->
+<div id="overlay-confirm-clear" class="overlay hidden">
+  <div class="overlay-box">
+    <h2 class="overlay-title">CLEAR DATA?</h2>
+    <p class="overlay-desc" style="margin-bottom:18px;">All progress will be deleted. Are you sure?</p>
+    <div class="choice-buttons">
+      <button class="btn-pixel btn-danger" id="btn-confirm-clear-yes">Yes, Delete</button>
+      <button class="btn-pixel" id="btn-confirm-clear-no">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     CREDITS
+═══════════════════════════════════════════════ -->
+<div id="screen-credits" class="screen">
+  <div class="menu-bg-stones" style="pointer-events:none;"></div>
+  <div class="menu-bg-vignette" style="pointer-events:none;"></div>
+  <div class="credits-container" style="position:relative;z-index:1;">
+    <h2 class="section-title">Credits</h2>
+
+    <div class="credits-block">
+      <p class="credits-story">
+        Deep beneath the ancient ruins, a serpent stirs.<br/>
+        Born in darkness, it seeks the light — and the brother<br/>
+        stolen away by forces of shadow and flame.<br/>
+        What begins as an escape becomes a quest for family.
+      </p>
+    </div>
+
+    <div class="credits-block">
+      <h3 class="credits-heading">Inspired By</h3>
+      <div class="credits-games">
+        <div class="credits-game-item">
+          <span class="credits-game-icon">⚔️</span>
+          <div>
+            <div class="credits-game-name">Clair Obscur: Expedition 33</div>
+            <div class="credits-game-note">Turn-based combat timing & cinematic battle feel</div>
+          </div>
+        </div>
+        <div class="credits-game-item">
+          <span class="credits-game-icon">🟡</span>
+          <div>
+            <div class="credits-game-name">Pac-Man</div>
+            <div class="credits-game-note">Maze navigation & one-way corridor design</div>
+          </div>
+        </div>
+        <div class="credits-game-item">
+          <span class="credits-game-icon">🎮</span>
+          <div>
+            <div class="credits-game-name">Pokémon</div>
+            <div class="credits-game-note">Chapter progression, enemy encounters & RPG growth</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="credits-block credits-author">
+      <h3 class="credits-heading">Created by</h3>
+      <p class="credits-name">ZynicKk</p>
+    </div>
+
+    <button class="btn-pixel" id="btn-credits-back" style="margin-top:28px;">← Back</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     DUNGEON SCREEN
+═══════════════════════════════════════════════ -->
+<div id="screen-dungeon" class="screen">
+
+  <!-- HUD -->
+  <div id="hud">
+    <div class="hud-left">
+      <div class="hud-title">MR. SNAKE</div>
+      <div id="hud-chapter-name" class="hud-chapter">Chapter I</div>
+    </div>
+    <div class="hud-stats">
+      <div class="stat-block">
+        <span class="stat-label">HP</span>
+        <div class="hp-bar-container" style="position:relative;">
+          <div id="hp-bar" class="hp-bar"></div>
+        </div>
+        <span id="hp-text" class="stat-value">25/25</span>
+      </div>
+      <div class="stat-block">
+        <span class="stat-label">ATK</span>
+        <span id="atk-text" class="stat-value">6</span>
+      </div>
+      <div class="stat-block">
+        <span class="stat-label">LVL</span>
+        <span id="lvl-text" class="stat-value">1</span>
+      </div>
+      <div class="charge-block">
+        <span class="stat-label">FANG</span>
+        <div class="charge-pip" id="charge-pip-1"></div>
+        <div class="charge-pip" id="charge-pip-2"></div>
+      </div>
+      <div id="hud-status" class="hud-status"></div>
+    </div>
+    <div class="hud-right">
+      <div id="hud-msg" class="hud-message"></div>
+      <button class="btn-hud-menu" id="btn-dungeon-menu" title="Back to Menu">☰ Menu</button>
+    </div>
+  </div>
+
+  <!-- Map container -->
+  <div id="dungeon-viewport">
+    <div id="dungeon-map"></div>
+  </div>
+
+  <!-- Legend -->
+  <div id="legend">
+    <span class="legend-item"><span class="leg-swatch leg-wall"></span>Wall</span>
+    <span class="legend-item"><span class="leg-swatch leg-chest"></span>Chest</span>
+    <span class="legend-item"><span class="leg-swatch leg-enemy"></span>Enemy</span>
+    <span class="legend-item"><span class="leg-swatch leg-trap"></span>Trap</span>
+    <span class="legend-item"><span class="leg-swatch leg-cp"></span>Checkpoint</span>
+    <span class="legend-item"><span class="leg-swatch leg-gate"></span>Gate</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     CHEST CHOICE OVERLAY
+═══════════════════════════════════════════════ -->
+<div id="overlay-chest" class="overlay hidden">
+  <div class="overlay-box">
+    <h2 class="overlay-title">CHEST OPENED</h2>
+    <p class="overlay-desc">Choose your reward:</p>
+    <div class="choice-buttons">
+      <button class="btn-pixel btn-choice" id="chest-hp">❤ +10 Max HP</button>
+      <button class="btn-pixel btn-choice" id="chest-atk">⚔ +3 Attack</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     CHECKPOINT OVERLAY
+═══════════════════════════════════════════════ -->
+<div id="overlay-checkpoint" class="overlay hidden">
+  <div class="overlay-box">
+    <h2 class="overlay-title">CHECKPOINT</h2>
+    <p class="overlay-desc">HP restored. Progress saved.</p>
+    <button class="btn-pixel" id="checkpoint-continue">Continue →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     TIMING OVERLAY
+═══════════════════════════════════════════════ -->
+<div id="timing-overlay" class="timing-overlay hidden">
+  <div class="timing-popup">
+    <div class="timing-label" id="timing-label">DODGE!</div>
+    <div class="timing-countdown" id="timing-countdown"></div>
+    <div class="timing-bar-bg" id="timing-bar-bg">
+      <div id="timing-window" class="timing-window"></div>
+      <div id="timing-cursor" class="timing-cursor"></div>
+    </div>
+    <div class="timing-hint">Press <span>SPACE</span> or click when in the zone</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     COMBAT SCREEN
+═══════════════════════════════════════════════ -->
+<div id="screen-combat" class="screen">
+  <div class="combat-bg"></div>
+  <div class="combat-ground"></div>
+
+  <div class="combat-arena">
+    <div class="combat-side enemy-side">
+      <div class="combatant-name" id="enemy-name">???</div>
+      <div style="position:relative;">
+        <div class="hp-bar-container wide" style="position:relative;">
+          <div id="enemy-hp-bar" class="hp-bar hp-enemy"></div>
+        </div>
+      </div>
+      <div class="hp-numbers"><span id="enemy-hp-cur">0</span> / <span id="enemy-hp-max">0</span></div>
+      <div id="combat-enemy-effect" class="combat-effect"></div>
+      <div id="enemy-sprite" class="enemy-sprite">👺</div>
+    </div>
+
+    <div class="combat-log-area" id="combat-log"></div>
+
+    <div class="combat-side player-side">
+      <div class="combatant-name">Mr. Snake</div>
+      <div style="position:relative;">
+        <div class="hp-bar-container wide" style="position:relative;">
+          <div id="player-combat-hp-bar" class="hp-bar"></div>
+        </div>
+      </div>
+      <div class="hp-numbers"><span id="player-hp-cur">0</span> / <span id="player-hp-max">0</span></div>
+      <div id="combat-player-effect" class="combat-effect"></div>
+      <div id="player-sprite" class="player-sprite">🐍</div>
+    </div>
+  </div>
+
+  <div class="combat-panel" id="combat-actions">
+    <div class="skill-charge-display">
+      <span class="skill-charge-label">FANG</span>
+      <div class="skill-pips">
+        <div class="skill-pip" id="cpip-1"></div>
+        <div class="skill-pip" id="cpip-2"></div>
+      </div>
+    </div>
+    <button class="btn-combat" id="btn-attack">⚔ Strike</button>
+    <button class="btn-combat" id="btn-skill" disabled>🐍 Fang Strike</button>
+  </div>
+
+  <div id="combat-result" class="combat-result hidden">
+    <div class="result-box">
+      <div id="result-icon" class="result-icon">⚔️</div>
+      <div id="result-text" class="result-text">Victory!</div>
+      <button class="btn-pixel" id="result-continue">Continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     GAME OVER
+═══════════════════════════════════════════════ -->
+<div id="screen-gameover" class="screen">
+  <div class="gameover-container">
+    <h1 class="gameover-title">YOU DIED</h1>
+    <p class="gameover-sub">The dungeon swallows another soul...</p>
+    <div class="gameover-buttons">
+      <button class="btn-pixel" id="btn-respawn">⟳ Return to Checkpoint</button>
+      <button class="btn-pixel btn-secondary" id="btn-main-menu">⌂ Main Menu</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER VICTORY
+═══════════════════════════════════════════════ -->
+<div id="screen-victory" class="screen">
+  <div class="victory-container">
+    <div class="victory-glow"></div>
+    <h1 class="victory-title">CHAPTER<br/>COMPLETE!</h1>
+    <p id="victory-chapter-name" class="victory-chapter-name">Chapter 1</p>
+    <p class="victory-sub">The path ahead has opened...</p>
+    <div class="victory-buttons">
+      <button class="btn-pixel" id="btn-victory-next">▶ Next Chapter</button>
+      <button class="btn-pixel btn-secondary" id="btn-victory-menu">⌂ Main Menu</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     GAME COMPLETE (all chapters done)
+═══════════════════════════════════════════════ -->
+<div id="screen-gamecomplete" class="screen">
+  <div class="menu-bg-stones"></div>
+  <div class="menu-bg-vignette"></div>
+  <div class="gamecomplete-container">
+    <div class="complete-stars">★ ★ ★</div>
+    <h1 class="gamecomplete-title">GAME<br/>COMPLETE</h1>
+    <p class="gamecomplete-sub">Your brother has been saved.</p>
+    <p class="gamecomplete-story">
+      The serpent emerged from the darkness,<br/>
+      scarred but unbroken. The dungeons, the swamps,<br/>
+      the inferno — all conquered. Family restored.
+    </p>
+    <p class="gamecomplete-credit">— Thank you for playing MR. SNAKE —</p>
+    <p class="gamecomplete-credit" style="margin-top:6px;font-size:0.85em;">Created by ZynicKk</p>
+    <button class="btn-pixel" id="btn-complete-menu" style="margin-top:28px;">⌂ Main Menu</button>
+  </div>
+</div>
+
+<!-- JS — load order matters -->
+<script src="js/constants.js"></script>
+<script src="js/state.js"></script>
+<script src="js/map.js"></script>
+<script src="js/snake.js"></script>
+<script src="js/renderer.js"></script>
+<script src="js/combat.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/input.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
